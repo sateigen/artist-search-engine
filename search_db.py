@@ -20,8 +20,16 @@ def view_database(cur):
         print("Artist: {}, Title of Piece: {}, Year: {}, Medium: {}, Subject: {}, Collection: {}\n".format(row[1], row[2], row[3], row[4], row[5], row[6]))
 
 
-def add_row(cur):
-    pass
+def add_row(conn, cur):
+    print("Follow the prompts to add a piece of artwork to the database.")
+    artist = input("Artist:\n > ")
+    title = input("Title of Piece:\n > ")
+    year = input("Year:\n > ")
+    medium = input("Medium:\n > ")
+    subject = input("Subject:\n > ")
+    collection = input("Collection:\n > ")
+    cur.execute("INSERT INTO artists(Artist, Title, Year, Medium, Subject, Collection) VALUES (%s, %s, %s, %s, %s, %s)", (artist, title, year, medium, subject, collection))
+    conn.commit()
 
 
 def main():
@@ -31,7 +39,7 @@ def main():
     if user_choice == 1:
         view_database(cur)
     if user_choice == 2:
-        add_row(cur)
+        add_row(conn, cur)
     cur.close()
     conn.close()
 
