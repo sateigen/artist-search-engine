@@ -32,6 +32,22 @@ def add_row(conn, cur):
     conn.commit()
 
 
+def search_database(cur):
+    response_dict = {
+                     'a': 'Artist',
+                     'c': 'Collection',
+                     'm': 'Medium',
+                     's': 'Subject',
+                     'y': 'Year'
+                     }
+    search_criteria = input("Would you like to search by [A]rtist, [Y]ear, [M]edium, [S]ubject, or [C]ollection ").lower()
+    if search_criteria in response_dict:
+        search_item = input("Which {} would you like to search?\n > ".format(response_dict[search_criteria].lower()))
+        cur.execute("SELECT * FROM artists WHERE " + response_dict[search_criteria] + " = " + search_item)
+        for row in cur:
+            print("Artist: {}, Title of Piece: {}, Year: {}, Medium: {}, Subject: {}, Collection: {}\n".format(row[1], row[2], row[3], row[4], row[5], row[6]))
+
+
 def main():
     conn = psycopg2.connect("dbname=artists user=shannon")
     cur = conn.cursor()
@@ -40,6 +56,8 @@ def main():
         view_database(cur)
     if user_choice == 2:
         add_row(conn, cur)
+    if user_choice == 3:
+        search_database(cur)
     cur.close()
     conn.close()
 
